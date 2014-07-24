@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using Newtonsoft.Json;
 using SublimeSharp.Host.Model;
@@ -16,13 +14,13 @@ namespace SublimeSharp.Host
         private readonly BinaryReader _reader;
         private readonly BinaryWriter _writer;
 
-        public event Action<Message> OnReceive;
-
         public ProcessingQueue(Stream stream)
         {
             _reader = new BinaryReader(stream);
             _writer = new BinaryWriter(stream);
         }
+
+        public event Action<Message> OnReceive;
 
         public void Start()
         {

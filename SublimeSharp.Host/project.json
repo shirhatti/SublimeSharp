@@ -1,13 +1,12 @@
 {
-	"dependencies":{
-		"Microsoft.CodeAnalysis":"0.7.4052301-beta",
-		"Newtonsoft.Json":"6.0.3"
+	"dependencies":{	
+		"Newtonsoft.Json":"6.0.3",
+        "System.Runtime": "4.0.0.0"
 	},
 	"frameworks":{
 		"net45":{
 			"dependencies": {
-				"K.CoreFx":"1.0.0-*",
-				"K.Collections":"1.0.0-*"
+				"Microsoft.CodeAnalysis":"0.7.4052301-beta"
 			}
 		}
 	}
