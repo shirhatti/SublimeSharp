@@ -1,4 +1,5 @@
 Host/packages/
+packages/
 obj/
 bin/
 *.dll
