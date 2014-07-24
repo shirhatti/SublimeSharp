@@ -1,3 +1,6 @@
 Host/packages/
 obj/
 bin/
+*.dll
+*.user
+*.pdb
