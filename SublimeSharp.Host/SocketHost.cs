@@ -20,6 +20,7 @@ namespace SublimeSharp.Host
         {
             _logger = logger;
             _port = port;
+            
             _socket = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp)
             {
                 DualMode = true

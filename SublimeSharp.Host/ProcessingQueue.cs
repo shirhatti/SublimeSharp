@@ -19,6 +19,7 @@ namespace SublimeSharp.Host
         {
             _reader = new StreamReader(stream);
             _writer = new StreamWriter(stream);
+            _writer.AutoFlush = true;
         }
 
         public event Action<Message> OnReceive;
@@ -35,11 +36,6 @@ namespace SublimeSharp.Host
             {
                 Trace.TraceInformation("[ProcessingQueue]: Post({0})", message);
                 var msg = JsonConvert.SerializeObject(message);
-                // TODO delimit response
-                while (msg.Length < 1024)
-                {
-                    msg += " ";
-                }
                 msg += "\n";
                 _writer.Write(msg);
             }
@@ -52,6 +48,10 @@ namespace SublimeSharp.Host
                 while (true)
                 {
                     var input = _reader.ReadLine();
+                    if (input == null)
+                    {
+                        continue;
+                    }
                     var message = JsonConvert.DeserializeObject<Message>(input);
                     Console.WriteLine(message);
                     Trace.TraceInformation("[ProcessingQueue]: OnReceive({0})", message);
