@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Threading;
 using Newtonsoft.Json;
 using SublimeSharp.Host.Model;
@@ -11,13 +12,13 @@ namespace SublimeSharp.Host
     public class ProcessingQueue
     {
         private readonly List<Message> _queue = new List<Message>();
-        private readonly BinaryReader _reader;
-        private readonly BinaryWriter _writer;
+        private readonly StreamReader _reader;
+        private readonly StreamWriter _writer;
 
         public ProcessingQueue(Stream stream)
         {
-            _reader = new BinaryReader(stream);
-            _writer = new BinaryWriter(stream);
+            _reader = new StreamReader(stream);
+            _writer = new StreamWriter(stream);
         }
 
         public event Action<Message> OnReceive;
@@ -33,7 +34,14 @@ namespace SublimeSharp.Host
             lock (_writer)
             {
                 Trace.TraceInformation("[ProcessingQueue]: Post({0})", message);
-                _writer.Write(JsonConvert.SerializeObject(message));
+                var msg = JsonConvert.SerializeObject(message);
+                // TODO delimit response
+                while (msg.Length < 1024)
+                {
+                    msg += " ";
+                }
+                msg += "\n";
+                _writer.Write(msg);
             }
         }
 
@@ -43,14 +51,19 @@ namespace SublimeSharp.Host
             {
                 while (true)
                 {
-                    var message = JsonConvert.DeserializeObject<Message>(_reader.ReadString());
+                    var input = _reader.ReadLine();
+                    var message = JsonConvert.DeserializeObject<Message>(input);
+                    Console.WriteLine(message);
                     Trace.TraceInformation("[ProcessingQueue]: OnReceive({0})", message);
-                    OnReceive(message);
+                    if (message != null)
+                    {
+                        OnReceive(message);
+                    }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex);
             }
         }
     }

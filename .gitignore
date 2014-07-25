@@ -6,3 +6,4 @@ bin/
 *.user
 *.pdb
 *.suo
+__pycache__/

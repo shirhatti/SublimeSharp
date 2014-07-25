@@ -1,4 +1,3 @@
-using System.Runtime;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +13,7 @@ namespace SublimeSharp.Host.CodeAnalysis
         public static List<Suggestion> GetCompletions(SimpleFileCompletionMessage message)
         {
             var returns = 20;
-            var documentText = message.DocumentText.Replace("\\\\", "\\");
+            var documentText = message.DocumentText;
             var workspace = new CustomWorkspace();
 
             var proj = workspace.AddProject("Program", LanguageNames.CSharp);
